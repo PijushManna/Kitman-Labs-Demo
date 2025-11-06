@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.kitman.data.base.BaseResponse
 import com.kitman.data.repository.interfaces.LoginRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class LoginViewModel(val repository: LoginRepository) : ViewModel() {
@@ -12,7 +14,7 @@ class LoginViewModel(val repository: LoginRepository) : ViewModel() {
 
     fun login(username: String, password: String){
         viewModelScope.launch {
-            repository.login(username, password).collect {
+            repository.login(username, password).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), BaseResponse.Loading).collect {
                 loginState.value = when(it){
                     is BaseResponse.Success -> {
                         LoginState(isSuccess = true, message = it.data.status)

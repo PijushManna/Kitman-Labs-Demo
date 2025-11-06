@@ -14,7 +14,6 @@ class AthletesRepoImpl(private val apiService: ApiService) : AthletesRepo {
     private var cachedSquads: Map<Int, Squad>? = null
 
     override fun getAthletes(): Flow<BaseResponse<List<Athlete>>> = channelFlow {
-        trySend(BaseResponse.Loading)
         try {
             if (cachedAthletes == null) {
                 val response = apiService.getAthletes()
@@ -29,7 +28,6 @@ class AthletesRepoImpl(private val apiService: ApiService) : AthletesRepo {
     }
 
     override fun getSquads(): Flow<BaseResponse<List<Squad>>>  = channelFlow {
-        trySend(BaseResponse.Loading)
         try {
             if (cachedSquads == null) {
                 val response = apiService.getSquads()

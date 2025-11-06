@@ -4,18 +4,24 @@ import com.kitman.data.base.BaseResponse
 import com.kitman.data.model.LoginResponse
 import com.kitman.data.network.ApiService
 import com.kitman.data.repository.interfaces.LoginRepository
+import com.kitman.data.repository.validator.Validator
 import com.kitman.utils.Constants.DEFAULT_ERROR
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 
-class LoginRepoImpl(private val apiService: ApiService) : LoginRepository {
+class LoginRepoImpl(private val apiService: ApiService, private val validator: Validator) : LoginRepository {
     override fun login(
         username: String,
         password: String
     ): Flow<BaseResponse<LoginResponse>>  = channelFlow {
-        trySend(BaseResponse.Loading)
-        delay(2000L)
+        if (!validator.isUserNameValid(username)){
+            trySend(BaseResponse.Error("Invalid username"))
+            return@channelFlow
+        }
+        if (!validator.isPasswordValid(password)) {
+            trySend(BaseResponse.Error("Invalid password"))
+            return@channelFlow
+        }
         try {
             val response = apiService.getLoginResponse()
             trySend(BaseResponse.Success(response))

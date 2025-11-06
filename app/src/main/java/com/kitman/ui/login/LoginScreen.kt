@@ -1,5 +1,6 @@
 package com.kitman.ui.login
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -36,18 +37,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kitman.data.repository.validator.Validator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun LoginScreen(
     onSuccessfulLogin: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val isUserNameValid by derivedStateOf { username.length > 3 }
-    val isPasswordValid by derivedStateOf { password.length > 3 }
+    val validator = koinInject<Validator>()
+    val isUserNameValid by derivedStateOf { validator.isUserNameValid(username) }
+    val isPasswordValid by derivedStateOf { validator.isPasswordValid(password) }
     val snackbarHostState = remember { SnackbarHostState() }
     val loginViewModel: LoginViewModel = koinViewModel()
     val loginResponse by loginViewModel.loginState.collectAsState()
