@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -51,6 +52,7 @@ fun LoginScreen(
     val loginViewModel: LoginViewModel = koinViewModel()
     val loginResponse by loginViewModel.loginState.collectAsState()
     val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
 
 
     LaunchedEffect(loginResponse) {
@@ -61,7 +63,7 @@ fun LoginScreen(
             loginResponse.isSuccess -> {
                 snackbarHostState.showSnackbar("Success : ${loginResponse.message}")
                 scope.launch {
-                    delay(2000L)
+                    delay(1000L)
                     onSuccessfulLogin()
                 }
             }
@@ -120,6 +122,7 @@ fun LoginScreen(
                     Row(horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                         Button(onClick = {
                             loginViewModel.login(username, password)
+                            focusManager.clearFocus()
                         }, enabled = isUserNameValid && isPasswordValid) {
                             Text("Login")
                         }

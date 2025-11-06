@@ -38,7 +38,7 @@ fun SquadCard(
                 .padding(16.dp)
         ) {
             Text(
-                text = squad.name,
+                text = squad.name + " : " + squad.id,
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold
                 ),

@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -25,7 +29,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsScreen(id: Int?) {
+fun DetailsScreen(id: Int?, onBack:() -> Unit) {
     val viewModel: DetailsViewModel = koinViewModel()
     val state by viewModel.uiState.collectAsState()
 
@@ -37,7 +41,14 @@ fun DetailsScreen(id: Int?) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Athlete Details") }
+                title = { Text("Athlete Details") },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        onBack()
+                    }) {
+                        Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
+                    }
+                }
             )
         }
     ) {

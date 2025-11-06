@@ -16,8 +16,8 @@ fun NavHost() {
         composable("login"){
             LoginScreen {
                 navHost.navigate("home"){
-                    popUpTo("home"){
-                        inclusive = false
+                    popUpTo("login"){
+                        inclusive = true
                     }
                 }
             }
@@ -29,7 +29,9 @@ fun NavHost() {
         }
         composable("details/{id}"){
             val id = it.arguments?.getString("id")?.toInt()
-            DetailsScreen(id)
+            DetailsScreen(id){
+                navHost.popBackStack()
+            }
         }
     }
 }
