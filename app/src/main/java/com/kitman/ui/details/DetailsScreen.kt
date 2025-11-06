@@ -1,0 +1,66 @@
+package com.kitman.ui.details
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.kitman.ui.home.AthleteCard
+import com.kitman.utils.Constants
+import org.koin.compose.viewmodel.koinViewModel
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DetailsScreen(id: Int?) {
+    val viewModel: DetailsViewModel = koinViewModel()
+    val state by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        if (id != null)
+        viewModel.getAthleteDetails(id)
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Athlete Details") }
+            )
+        }
+    ) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(it), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            when {
+                id == null -> Text("Invalid ID")
+                state.isLoading -> Text("Loading")
+                state.error != null -> Text(state.error ?: Constants.DEFAULT_ERROR)
+                state.athlete != null -> {
+                    AthleteCard(state.athlete!!.athlete, modifier = Modifier.fillMaxWidth())
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text("Squads:")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    state.athlete!!.squads.forEach { squad ->
+                        SquadCard(squad)
+                    }
+                }
+            }
+        }
+    }
+}
