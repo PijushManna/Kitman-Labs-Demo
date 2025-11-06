@@ -14,12 +14,13 @@ loggingInterceptor = "5.3.0"
 koin = "4.1.1"
 koinTest = "3.6.0"
 navigation = "2.9.5"
+mockito = "5.+"
 
 # Core test libs
 androidxJunit = "1.2.1"
 truth = "1.4.2"
 mockk = "1.13.13"
-coroutinesTest = "1.9.0"
+coroutinesTest = "1.10.2"
 coreTesting = "2.2.0"
 lifecycleRuntimeTesting = "2.8.5"
 
@@ -48,6 +49,9 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest"}
+mockito = {module = "org.mockito:mockito-core", version.ref = "mockito" }
+mockito-inline = {module = "org.mockito:mockito-inline", version.ref = "mockito" }
 
 #Retrofit
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
